@@ -3,7 +3,7 @@
 > Tint your VS Code window chrome per project so you can tell parallel Claude Code sessions apart at a glance.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Platform: Windows + PowerShell](https://img.shields.io/badge/Platform-Windows%20%2B%20PowerShell-blue)
+![Platform: Windows / macOS / Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)
 
 A [Claude Code](https://claude.com/claude-code) skill that paints VS Code window chrome (title bar, activity bar, status bar, tabs, user-message bubbles) in a chosen color, leaving the editor and chat content neutral gray. Twenty hand-picked dark presets, or any custom hex.
 
@@ -55,13 +55,25 @@ Or pass any custom hex: `#2a4f3c`.
 
 ## Installation
 
-Clone into your Claude Code skills directory:
+Clone into your Claude Code skills directory.
 
+**Windows** (PowerShell):
 ```powershell
 git clone https://github.com/collagerai/claude-code-colorize-project.git "$env:USERPROFILE\.claude\skills\colorize-project"
 ```
 
-Claude Code picks the skill up automatically next time you start a session. Verify it's loaded — in any session ask "what skills are available" or check `~/.claude/skills/colorize-project/` exists.
+**macOS / Linux** (bash):
+```bash
+git clone https://github.com/collagerai/claude-code-colorize-project.git ~/.claude/skills/colorize-project
+chmod +x ~/.claude/skills/colorize-project/scripts/apply-colors.sh
+```
+
+Claude Code picks the skill up automatically the next time you start a session. Verify by asking "what skills are available" in a session, or check `~/.claude/skills/colorize-project/` exists.
+
+**Requirements**
+- Windows: PowerShell (preinstalled)
+- macOS: bash + `python3` (preinstalled since macOS 12.3+; if missing, `brew install python3`)
+- Linux: bash + `python3` (preinstalled on most distros; `apt install python3` / `dnf install python3` otherwise)
 
 ## Usage
 
@@ -75,10 +87,11 @@ In any Claude Code session:
 | `/colorize-project #2a4f3c` | Applies your custom hex |
 | `покажи цвета` / `show palette` | Claude lists the palette with hex codes |
 
-You can also call the PowerShell script directly without Claude:
+You can also call the script directly without Claude.
 
+**Windows** (PowerShell):
 ```powershell
-# Folder mode (auto-detects .code-workspace inside)
+# Folder mode (auto-detects .code-workspace files inside)
 powershell -ExecutionPolicy Bypass `
   -File "$env:USERPROFILE\.claude\skills\colorize-project\scripts\apply-colors.ps1" `
   -Color royal-blue `
@@ -89,6 +102,19 @@ powershell -ExecutionPolicy Bypass `
   -File "$env:USERPROFILE\.claude\skills\colorize-project\scripts\apply-colors.ps1" `
   -Color burgundy `
   -WorkspaceFile "C:\path\to\your\project\my.code-workspace"
+```
+
+**macOS / Linux** (bash):
+```bash
+# Folder mode
+~/.claude/skills/colorize-project/scripts/apply-colors.sh \
+  --color royal-blue \
+  --workspace-path ~/path/to/your/project
+
+# Workspace-file mode
+~/.claude/skills/colorize-project/scripts/apply-colors.sh \
+  --color burgundy \
+  --workspace-file ~/path/to/your/project/my.code-workspace
 ```
 
 Pass both parameters at once to update both targets.
@@ -152,7 +178,7 @@ All channels clamped to 0–255. The "vibrant accent" formula produces a saturat
 
 ## Platform
 
-Currently **Windows + PowerShell only**. The algorithm is portable — a bash equivalent for macOS / Linux is straightforward; PRs welcome.
+Works on **Windows**, **macOS**, and **Linux**. Two equivalent scripts — same palette, same shade algorithm, same write logic. The skill auto-routes to the right one based on the host OS.
 
 ## Files
 
@@ -160,7 +186,8 @@ Currently **Windows + PowerShell only**. The algorithm is portable — a bash eq
 colorize-project/
 ├── SKILL.md                    # Skill definition for Claude Code
 ├── scripts/
-│   └── apply-colors.ps1        # PowerShell engine (preset lookup, derivation, write)
+│   ├── apply-colors.ps1        # PowerShell engine (Windows)
+│   └── apply-colors.sh         # bash + python3 engine (macOS / Linux)
 ├── screenshots/
 │   ├── example-forest-green.png
 │   └── example-brick-red.png
