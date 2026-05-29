@@ -1,0 +1,23 @@
+# OS / IDE noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Backup / temp
+*.bak
+*.tmp
+*.log
+*~
+*.swp
+*.swo
+
+# PowerShell-specific
+*.ps1.bak
+
+# Local-only experiments
+local/
+scratch/
+_apply_*.ps1
+_cleanup_*.ps1
